@@ -6,74 +6,85 @@ import com.seveneleven.bookmystay.model.Reservation;
 
 public class BookingQueueService {
 
-    Queue<Reservation> bookingQueue;
-    InventoryService inventory;
+	Queue<Reservation> bookingQueue;
+	InventoryService inventory;
+	private BookingHistoryService historyService;
+	public BookingQueueService(InventoryService inventory,
+			BookingHistoryService historyService) {
 
-    public BookingQueueService(InventoryService inventory) {
-        this.inventory = inventory;
-        bookingQueue = new LinkedList<>();
-    }
+		this.inventory = inventory;
+		this.historyService = historyService;
+		bookingQueue = new LinkedList<>();
+	}
 
-    public void addBookingRequest(Reservation reservation) {
+	public void addBookingRequest(Reservation reservation) {
 
-        bookingQueue.offer(reservation);
+		bookingQueue.offer(reservation);
 
-        System.out.println(
-                reservation.getGuestName() +
-                " added to booking queue for " +
-                reservation.getRoomType());
-    }
+		System.out.println(
+				reservation.getGuestName() +
+				" added to booking queue for " +
+				reservation.getRoomType());
+	}
 
-    public void processBookings() {
+	public void processBookings() {
 
-        Map<String,Integer> typeCount = inventory.getTypeCountMap();
-        Set<String> bookedRooms = inventory.getBookedRooms();
-        Map<String,Set<String>> allocatedRooms = inventory.getAllocatedRooms();
+		Map<String,Integer> typeCount = inventory.getTypeCountMap();
+		Set<String> bookedRooms = inventory.getBookedRooms();
+		Map<String,Set<String>> allocatedRooms = inventory.getAllocatedRooms();
 
-        while(!bookingQueue.isEmpty()) {
+		while(!bookingQueue.isEmpty()) {
 
-            Reservation r = bookingQueue.poll();
-            String type = r.getRoomType();
+			Reservation r = bookingQueue.poll();
+			String type = r.getRoomType();
 
-            int available = typeCount.getOrDefault(type,0);
+			int available = typeCount.getOrDefault(type,0);
 
-            System.out.println("\nProcessing booking for " + r.getGuestName());
+			System.out.println("\nProcessing booking for " + r.getGuestName());
 
-            if(available > 0) {
+			if(available > 0) {
 
-                String roomId = generateRoomId(type, bookedRooms);
-                r.setReservationId(roomId);
-                bookedRooms.add(roomId);
+			    String roomId = generateRoomId(type, bookedRooms);
 
-                allocatedRooms
-                        .computeIfAbsent(type, k -> new HashSet<>())
-                        .add(roomId);
+			    r.setReservationId(roomId);
+			    r.setStatus("CONFIRMED");
 
-                typeCount.put(type, available - 1);
+			    bookedRooms.add(roomId);
 
-                System.out.println("Booking Confirmed");
-                System.out.println("Room ID : " + roomId);
+			    allocatedRooms
+			        .computeIfAbsent(type, k -> new HashSet<>())
+			        .add(roomId);
 
-            } else {
+			    typeCount.put(type, available - 1);
 
-                System.out.println("Booking Failed → No rooms available");
-            }
-        }
-    }
+			    historyService.addReservation(r);
 
-    private String generateRoomId(String type, Set<String> bookedRooms) {
+			    System.out.println("Booking Confirmed");
+			    System.out.println("Room ID : " + roomId);
 
-        int number = 1;
+			} else {
 
-        while(true) {
+			    r.setStatus("FAILED");
+			    historyService.addReservation(r);
 
-            String roomId = type + "-" + number;
+			    System.out.println("Booking Failed → No rooms available");
+			}
+		}
+	}
 
-            if(!bookedRooms.contains(roomId)) {
-                return roomId;
-            }
+	private String generateRoomId(String type, Set<String> bookedRooms) {
 
-            number++;
-        }
-    }
+		int number = 1;
+
+		while(true) {
+
+			String roomId = type + "-" + number;
+
+			if(!bookedRooms.contains(roomId)) {
+				return roomId;
+			}
+
+			number++;
+		}
+	}
 }

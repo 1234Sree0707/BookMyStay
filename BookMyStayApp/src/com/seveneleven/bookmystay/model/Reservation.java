@@ -5,10 +5,12 @@ public class Reservation {
     private String guestName;
     private String roomType;
     private String reservationId;
+    private String status;
 
     public Reservation(String guestName, String roomType) {
         this.guestName = guestName;
         this.roomType = roomType;
+        this.status = "PENDING";
     }
 
     public String getGuestName() {
@@ -25,5 +27,13 @@ public class Reservation {
 
     public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

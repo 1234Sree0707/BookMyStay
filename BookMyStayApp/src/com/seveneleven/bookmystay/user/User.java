@@ -12,16 +12,19 @@ public class User {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        String choice="";
+        String choice = "";
 
+        // Inventory setup
         InventoryService inventory = new InventoryService();
-
         HotelAdmin admin = new HotelAdmin(inventory);
         admin.setInventory();
 
+        // Services initialization
         Search search = new Search(inventory);
-        BookingQueueService bookingService = new BookingQueueService(inventory);
         ServiceManagement serviceModule = new ServiceManagement();
+        BookingHistoryService historyService = new BookingHistoryService();
+        BookingQueueService bookingService =
+                new BookingQueueService(inventory, historyService);
 
         System.out.println("\n======= Welcome to BookMyStay =======\n");
 
@@ -44,6 +47,7 @@ public class User {
 
             Reservation reservation = new Reservation(name, typeRoom);
 
+            // Add booking request
             bookingService.addBookingRequest(reservation);
             bookingService.processBookings();
 
@@ -58,7 +62,8 @@ public class User {
                 System.out.println("0 Finish");
 
                 while(true) {
-                	System.out.println("Enter the service you want to add");
+
+                    System.out.println("Enter the service you want to add:");
 
                     int option;
 
@@ -97,10 +102,12 @@ public class User {
                     }
                 }
 
+                // Display services
                 serviceModule.displayServices(reservationId);
+
+                // Billing
                 double roomPrice = inventory.getTypeCostMap().get(typeRoom);
                 double serviceCost = serviceModule.getServiceTotal(reservationId);
-
                 double totalBill = roomPrice + serviceCost;
 
                 System.out.println("\n========== FINAL BILL ==========");
@@ -116,6 +123,10 @@ public class User {
             choice = sc.nextLine();
 
         } while(choice.equalsIgnoreCase("yes"));
+
+        // Show booking history report
+        System.out.println("\n====== BOOKING HISTORY REPORT ======");
+        historyService.displayBookingHistory();
 
         System.out.println("\nThank you for using BookMyStay!");
 
