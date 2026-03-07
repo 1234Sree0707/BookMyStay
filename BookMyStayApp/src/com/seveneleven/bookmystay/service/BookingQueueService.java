@@ -21,11 +21,7 @@ public class BookingQueueService {
 
         bookingQueue.offer(reservation);
 
-        System.out.println(
-            reservation.getGuestName() +
-            " request added to booking queue for " +
-            reservation.getRoomType()
-        );
+        System.out.println(reservation.getGuestName() +" request added to booking queue for " + reservation.getRoomType());
     }
 
     public void processBookings() {
@@ -45,18 +41,11 @@ public class BookingQueueService {
 
                 typeCount.put(roomType, available - 1);
 
-                System.out.println(
-                    "Booking Confirmed → " +
-                    roomType +
-                    " room allocated"
-                );
+                System.out.println("Booking Confirmed → " +roomType +" room allocated");
 
             } else {
 
-                System.out.println(
-                    "Booking Failed → No rooms available for " +
-                    roomType
-                );
+                System.out.println("Booking Failed → No rooms available for " +roomType);
             }
         }
     }
