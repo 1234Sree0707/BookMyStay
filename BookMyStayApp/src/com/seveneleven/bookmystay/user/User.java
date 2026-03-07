@@ -25,11 +25,9 @@ public class User {
         System.out.println("Enter the room type:");
         String typeRoom=sc.nextLine();
 
-        BookingQueueService bookingService =
-                new BookingQueueService(inventory);
+        BookingQueueService bookingService =new BookingQueueService(inventory);
 
-        bookingService.addBookingRequest(
-                new Reservation(name,typeRoom));
+        bookingService.addBookingRequest(new Reservation(name,typeRoom));
 
        
 
