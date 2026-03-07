@@ -1,8 +1,6 @@
 package com.seveneleven.bookmystay.service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class InventoryService {
 
@@ -10,10 +8,18 @@ public class InventoryService {
     Map<String,Double> typePrice;
     HashSet<String> roomType;
 
+    // UC4 structures
+    Set<String> bookedRoomIds;
+    Map<String, Set<String>> allocatedRooms;
+
     public InventoryService() {
-        this.typeCount = new HashMap<>();
-        this.typePrice = new HashMap<>();
-        this.roomType = new HashSet<>();
+
+        typeCount = new HashMap<>();
+        typePrice = new HashMap<>();
+        roomType = new HashSet<>();
+
+        bookedRoomIds = new HashSet<>();
+        allocatedRooms = new HashMap<>();
     }
 
     public Map<String,Integer> getTypeCountMap(){
@@ -26,6 +32,14 @@ public class InventoryService {
 
     public HashSet<String> getType(){
         return roomType;
+    }
+
+    public Set<String> getBookedRooms(){
+        return bookedRoomIds;
+    }
+
+    public Map<String,Set<String>> getAllocatedRooms(){
+        return allocatedRooms;
     }
 
     public void setRoomType(String type) {

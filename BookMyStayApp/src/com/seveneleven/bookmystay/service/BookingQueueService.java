@@ -1,8 +1,6 @@
 package com.seveneleven.bookmystay.service;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Map;
+import java.util.*;
 
 import com.seveneleven.bookmystay.model.Reservation;
 
@@ -16,48 +14,66 @@ public class BookingQueueService {
         bookingQueue = new LinkedList<>();
     }
 
-    // Step 1: Accept Booking Request
     public void addBookingRequest(Reservation reservation) {
 
         bookingQueue.offer(reservation);
 
         System.out.println(
-            reservation.getGuestName() +
-            " request added to booking queue for " +
-            reservation.getRoomType()
-        );
+                reservation.getGuestName() +
+                " added to booking queue for " +
+                reservation.getRoomType());
     }
 
     public void processBookings() {
 
         Map<String,Integer> typeCount = inventory.getTypeCountMap();
+        Set<String> bookedRooms = inventory.getBookedRooms();
+        Map<String,Set<String>> allocatedRooms = inventory.getAllocatedRooms();
 
         while(!bookingQueue.isEmpty()) {
 
             Reservation r = bookingQueue.poll();
+            String type = r.getRoomType();
 
-            String roomType = r.getRoomType();
-            int available = typeCount.getOrDefault(roomType,0);
+            int available = typeCount.getOrDefault(type,0);
 
             System.out.println("\nProcessing booking for " + r.getGuestName());
 
             if(available > 0) {
 
-                typeCount.put(roomType, available - 1);
+                String roomId = generateRoomId(type, bookedRooms);
 
-                System.out.println(
-                    "Booking Confirmed → " +
-                    roomType +
-                    " room allocated"
-                );
+                bookedRooms.add(roomId);
+
+                allocatedRooms
+                        .computeIfAbsent(type, k -> new HashSet<>())
+                        .add(roomId);
+
+                typeCount.put(type, available - 1);
+
+                System.out.println("Booking Confirmed");
+                System.out.println("Room ID : " + roomId);
 
             } else {
 
-                System.out.println(
-                    "Booking Failed → No rooms available for " +
-                    roomType
-                );
+                System.out.println("Booking Failed → No rooms available");
             }
+        }
+    }
+
+    private String generateRoomId(String type, Set<String> bookedRooms) {
+
+        int number = 1;
+
+        while(true) {
+
+            String roomId = type + "-" + number;
+
+            if(!bookedRooms.contains(roomId)) {
+                return roomId;
+            }
+
+            number++;
         }
     }
 }

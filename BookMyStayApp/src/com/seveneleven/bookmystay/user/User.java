@@ -9,15 +9,17 @@ import java.util.*;
 public class User {
 
     public static void main(String[] args) {
+    	String choice="";
     	Scanner sc=new Scanner(System.in);
-
-        InventoryService inventory = new InventoryService();
+    	InventoryService inventory = new InventoryService();
 
         HotelAdmin admin = new HotelAdmin(inventory);
         admin.setInventory();
 
         Search search = new Search(inventory);
         search.searchRoomDetails();
+    	do {
+
         
         System.out.println("Enter your name:");
         String name=sc.nextLine();
@@ -34,5 +36,9 @@ public class User {
        
 
         bookingService.processBookings();
+        System.out.println("Do you want to reserve another room(yes/no)");
+        choice=sc.nextLine();
+    	}while(choice.equalsIgnoreCase("yes"));
+    	sc.close();
     }
 }
