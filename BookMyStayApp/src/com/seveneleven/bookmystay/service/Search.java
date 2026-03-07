@@ -30,7 +30,7 @@ public class Search {
                 System.out.println("Room Type : " + type);
                 System.out.println("Price     : ₹" + price);
                 System.out.println("Available : " + count);
-                System.out.println("-----------------------");
+                System.out.println("======================");
             }
         }
     }

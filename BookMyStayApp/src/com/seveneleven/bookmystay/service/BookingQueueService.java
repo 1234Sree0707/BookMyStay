@@ -18,10 +18,14 @@ public class BookingQueueService {
 
         bookingQueue.offer(reservation);
 
+<<<<<<< HEAD
         System.out.println(
                 reservation.getGuestName() +
                 " added to booking queue for " +
                 reservation.getRoomType());
+=======
+        System.out.println(reservation.getGuestName() +" request added to booking queue for " + reservation.getRoomType());
+>>>>>>> 2cf6d3771647def2e4ca6406521465e296c4f230
     }
 
     public void processBookings() {
@@ -43,6 +47,7 @@ public class BookingQueueService {
 
                 String roomId = generateRoomId(type, bookedRooms);
 
+<<<<<<< HEAD
                 bookedRooms.add(roomId);
 
                 allocatedRooms
@@ -77,3 +82,14 @@ public class BookingQueueService {
         }
     }
 }
+=======
+                System.out.println("Booking Confirmed → " +roomType +" room allocated");
+
+            } else {
+
+                System.out.println("Booking Failed → No rooms available for " +roomType);
+            }
+        }
+    }
+}
+>>>>>>> 2cf6d3771647def2e4ca6406521465e296c4f230
