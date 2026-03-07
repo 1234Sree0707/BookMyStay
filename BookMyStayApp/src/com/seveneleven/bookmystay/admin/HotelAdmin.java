@@ -1,18 +1,27 @@
 package com.seveneleven.bookmystay.admin;
-import com.seveneleven.bookmystay.service.InventoryService;
-public class HotelAdmin {
-	public void setInventory() {
-		InventoryService s=new InventoryService();
-		s.setRoomType("SINGLE");
-		s.setRoomType("DOUBLE");
-		s.setRoomType("SUITE");
-		s.setRoomTypeCount("SINGLE",50);
-		s.setRoomTypeCount("DOUBLE",100);
-		s.setRoomTypeCount("SUITE",25);
-		s.setRoomTypeCost("SINGLE", 19000.0);
-		s.setRoomTypeCost("DOUBLE",24000.0);
-		s.setRoomTypeCost("SUITE", 35000.0);
-	}
-	
 
+import com.seveneleven.bookmystay.service.InventoryService;
+
+public class HotelAdmin {
+
+    InventoryService inventory;
+
+    public HotelAdmin(InventoryService inventory) {
+        this.inventory = inventory;
+    }
+
+    public void setInventory() {
+
+        inventory.setRoomType("SINGLE");
+        inventory.setRoomType("DOUBLE");
+        inventory.setRoomType("SUITE");
+
+        inventory.setRoomTypeCount("SINGLE",50);
+        inventory.setRoomTypeCount("DOUBLE",100);
+        inventory.setRoomTypeCount("SUITE",25);
+
+        inventory.setRoomTypeCost("SINGLE",19000.0);
+        inventory.setRoomTypeCost("DOUBLE",24000.0);
+        inventory.setRoomTypeCost("SUITE",35000.0);
+    }
 }
