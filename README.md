@@ -3,6 +3,8 @@ BookMyStay is a hotel booking application built as a teaching project for Core J
 It models a real-world hotel reservation system where guests can search, reserve, and enhance bookings with add-on services.
 The system ensures data consistency, fairness, and atomic inventory updates to prevent double-booking.
 Use Cases
+
+
 UC1:
  Room Inventory Setup & Management
  Data Structures: HashMap for room counts and prices
