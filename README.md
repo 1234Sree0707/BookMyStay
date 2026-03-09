@@ -27,3 +27,4 @@ UC6:
 - Booking History & Reporting
 - Data Structures: List of reservations
 - Goal: Maintain complete booking history for reporting and customer support
+
